@@ -1,63 +1,40 @@
 use anyhow::{Context, Result};
-use serde::Deserialize;
-use std::env;
+use clap::Parser;
 use std::fs;
 
-const FNAME: &str = "cv2res.toml";
+use crate::structs::CV;
 
-#[derive(Debug, Deserialize)]
-struct CV {
-    _name: String,
-    _phone: String,
-    _email: String,
-    _site: String,
-    _github: String,
-    _projs: Vec<Proj>,
-    _small_projs: Vec<SmallProj>,
-    _hobby_projs: Vec<HobbyProj>,
+pub mod structs;
+
+const DEFAULT_FNAME: &str = "cv2res.toml";
+const DEFAULT_FPATH: &str = ".";
+
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+    #[arg(short, long, default_value = DEFAULT_FNAME)]
+    fpath: String,
+
+    #[arg(short, long, default_value = DEFAULT_FPATH)]
+    dir: String,
 }
-
-#[derive(Debug, Deserialize)]
-struct Proj {
-    _title: String,
-    _url: String,
-    _stack: String,
-    _desc: Vec<String>,
-}
-
-#[derive(Debug, Deserialize)]
-struct SmallProj {
-    _title: String,
-    _url: String,
-    _desc: Vec<String>,
-}
-
-type HobbyProj = SmallProj;
 
 fn parse_cfg_file(path: &str) -> Result<CV> {
-    let _toml_str = fs::read_to_string(path).with_context(|| format!("Failed to read {path}."))?;
-
-    // TODO: deserialize to structs
-
-    todo!()
+    let toml_str = fs::read_to_string(path)?;
+    let cv = toml::from_str::<CV>(&toml_str)?;
+    Ok(cv)
 }
 
 fn main() -> Result<()> {
-    // Chdir if provided
-    let args: Vec<String> = env::args().collect();
-    if args.len() > 2 {
-        eprintln!("Usage: {} <dir>", args[0]);
-        std::process::exit(1);
-    } else if args.len() == 2 {
-        std::env::set_current_dir(&args[1])?;
+    let args = Args::parse();
+    println!("Running on {} in {}.", args.fpath, args.dir);
+
+    if args.dir != DEFAULT_FPATH {
+        std::env::set_current_dir(args.dir)?;
     }
 
-    // TODO: add flag for config file
-
-    // TODO: add flag for chdir
-
-    // read config.toml
-    let _content = parse_cfg_file(FNAME);
+    let _cv_info =
+        parse_cfg_file(&args.fpath).with_context(|| "Failed to read config file.".to_string());
 
     Ok(())
 }
