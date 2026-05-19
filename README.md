@@ -3,9 +3,12 @@
 Unreasonably straightforward Rust tool built because manually tweaking my
 `resume.typ` depending on the job application was too arduous.
 
-This program reads a `toml` file w/ pre-set fields, and fills them into a Typst
+This program reads a TOML file w/ pre-set fields, and fills them into a Typst
 resume template, eventually outputting it, formatting it (w/ `typstyle`), and
 compiling it (w/ `typst`).
+
+The template is fixed, but allows flexibility in terms of choosing to not
+include certain components within your TOML config.
 
 ## Setup
 
@@ -21,7 +24,7 @@ cargo install toml2cv
 ## Usage
 
 ```bash
-# Assuming `cv2.toml` exists in the PWD; produces `output.typ`
+# Assuming `2cv.toml` exists in the PWD; produces `output.typ`
 toml2cv
 
 # Run in another directory, and format + build Typst output file
