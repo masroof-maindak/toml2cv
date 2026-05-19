@@ -7,15 +7,19 @@ use crate::structs::CV;
 
 pub mod structs;
 
-const DEFAULT_FNAME: &str = "2cv.toml";
+const DEFAULT_IN_FNAME: &str = "2cv.toml";
+const DEFAULT_OUT_FNAME: &str = "output.typ";
 const DEFAULT_DIR: &str = ".";
 const DEFAULT_TMPLT_NAME: &str = "cv.typ";
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    #[arg(short, long, default_value = DEFAULT_FNAME)]
-    fpath: String,
+    #[arg(short, long, default_value = DEFAULT_IN_FNAME)]
+    input: String,
+
+    #[arg(short, long, default_value = DEFAULT_OUT_FNAME)]
+    output: String,
 
     #[arg(short, long, default_value = DEFAULT_DIR)]
     dir: String,
@@ -40,7 +44,7 @@ fn main() -> Result<()> {
     }
 
     let mut cv =
-        parse_cfg_file(&args.fpath).with_context(|| "Failed to read config file.".to_string())?;
+        parse_cfg_file(&args.input).with_context(|| "Failed to read config file.".to_string())?;
 
     if args.anon {
         cv.anonymise();
@@ -55,9 +59,7 @@ fn main() -> Result<()> {
         println!("{output}");
     }
 
-    // TODO: extract fname
-
-    std::fs::write("output.typ", output)
+    std::fs::write(args.output, output)
         .with_context(|| "Failed to dump output to file.".to_string())?;
 
     // TODO: run a typst formatter and `typst compile fname.typ` too
