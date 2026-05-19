@@ -30,7 +30,7 @@
 #}
 
 #custom-title("Education")[
-{% for edu in institutes %}
+{%- for edu in institutes %}
   #education-heading(
     "{{ edu.institute }}",
     "{{ edu.location }}",
@@ -43,12 +43,11 @@
   - {{ line }}
 {%- endfor %}
   ]
-
 {% endfor -%}
 ]
 
 #custom-title("Experience")[
-{% for wrk in workplaces %}
+{%- for wrk in workplaces %}
   #work-heading(
     "{{ wrk.title }}",
     "{{ wrk.company }}",
@@ -60,12 +59,11 @@
   - {{ line }}
 {%- endfor %}
   ]
-
 {% endfor -%}
 ]
 
 #custom-title("Projects")[
-{% for proj in projects %}
+{%- for proj in projects %}
   #project-heading(
     "{{ proj.title }}",
     stack: "{{ proj.stack }}",
@@ -75,12 +73,11 @@
   - {{ line }}
 {%- endfor %}
   ]
-
 {% endfor -%}
 ]
 
 #custom-title("Smaller Projects/Tools")[
-{% for proj in small_projects %}
+{%- for proj in small_projects %}
   #project-heading(
     "{{ proj.title }}",
     project-url: "{{ proj.url }}"
@@ -89,12 +86,11 @@
   - {{ line }}
 {%- endfor %}
   ]
-
 {% endfor -%}
 ]
 
 #custom-title("Hobby Projects")[
-{% for proj in hobby_projects %}
+{%- for proj in hobby_projects %}
   #project-heading(
     "{{ proj.title }}",
     project-url: "{{ proj.url }}"
@@ -103,6 +99,15 @@
   - {{ line }}
 {%- endfor %}
   ]
-
 {% endfor -%}
 ]
+
+#custom-title("Skills")[
+  #skills()[
+    - *Languages:* {{ skills.langs }}
+    - *Operating Systems:* {{ skills.operating_systems }}
+    - *Developer Tools:* {{ skills.dev_tools }}
+    - *Libraries:* {{ skills.libraries }}
+  ]
+]
+

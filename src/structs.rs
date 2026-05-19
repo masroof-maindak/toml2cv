@@ -13,6 +13,7 @@ pub struct CV {
     projects: Option<Vec<Proj>>,
     small_projects: Option<Vec<SmallProj>>,
     hobby_projects: Option<Vec<HobbyProj>>,
+    skills: Option<Skills>,
 }
 
 impl CV {
@@ -68,3 +69,11 @@ pub struct SmallProj {
 }
 
 type HobbyProj = SmallProj;
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Skills {
+    langs: String,
+    operating_systems: String,
+    dev_tools: String,
+    libraries: String,
+}
