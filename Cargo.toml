@@ -1,11 +1,15 @@
 [package]
 name = "toml2cv"
-version = "0.1.0"
+version = "1.0.0"
+repository = "https://github.com/masroof-maindak/toml2cv"
+readme = "README.md"
 edition = "2024"
+license = "MIT"
+description = "Generate a Typst resume via a config file."
+keywors = ["toml", "resume", "cv", "template", "typst"]
 
 [dependencies]
 anyhow = "1.0.102"
-camino = "1.2.2"
 clap = { version = "4.6.1", features = ["derive"] }
 serde = { version = "1.0.228", features = ["derive"] }
 tera = "1.20.1"

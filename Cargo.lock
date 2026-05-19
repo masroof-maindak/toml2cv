@@ -114,12 +114,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5d20789868f4b01b2f2caec9f5c4e0213b41e3e5702a50157d699ae31ced2fcb"
 
 [[package]]
-name = "camino"
-version = "1.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e629a66d692cb9ff1a1c664e41771b3dcaf961985a9774c0eb0bd1b51cf60a48"
-
-[[package]]
 name = "cc"
 version = "1.2.62"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -857,10 +851,9 @@ dependencies = [
 
 [[package]]
 name = "toml2cv"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
- "camino",
  "clap",
  "serde",
  "tera",
