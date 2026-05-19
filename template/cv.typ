@@ -23,12 +23,7 @@
   // linkedin-user-id: linkedin,
   github-username: github,
 )
-
-{#
-  FIXME: tera.render fails when the variables being iterated through via for
-  loops don't exist; wrap the entire expression in an 'if \_.is_some()'
-#}
-
+{% if institutes %}
 #custom-title("Education")[
 {%- for edu in institutes %}
   #education-heading(
@@ -45,7 +40,9 @@
   ]
 {% endfor -%}
 ]
+{% endif -%}
 
+{%- if workplaces %}
 #custom-title("Experience")[
 {%- for wrk in workplaces %}
   #work-heading(
@@ -61,7 +58,9 @@
   ]
 {% endfor -%}
 ]
+{% endif -%}
 
+{%- if projects %}
 #custom-title("Projects")[
 {%- for proj in projects %}
   #project-heading(
@@ -75,7 +74,9 @@
   ]
 {% endfor -%}
 ]
+{% endif -%}
 
+{%- if small_projects %}
 #custom-title("Smaller Projects/Tools")[
 {%- for proj in small_projects %}
   #project-heading(
@@ -88,7 +89,9 @@
   ]
 {% endfor -%}
 ]
+{% endif -%}
 
+{%- if hobby_projects %}
 #custom-title("Hobby Projects")[
 {%- for proj in hobby_projects %}
   #project-heading(
@@ -101,7 +104,9 @@
   ]
 {% endfor -%}
 ]
+{% endif -%}
 
+{%- if skills %}
 #custom-title("Skills")[
   #skills()[
     - *Languages:* {{ skills.langs }}
@@ -110,4 +115,4 @@
     - *Libraries:* {{ skills.libraries }}
   ]
 ]
-
+{% endif -%}
