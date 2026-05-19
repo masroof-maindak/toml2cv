@@ -59,8 +59,25 @@ fn check_if_in_path(bin: &str) -> Result<bool> {
             .split(":")
             .map(|p| format!("{}/{}", p, bin))
             .any(|p| Path::new(&p).exists())),
-        Err(e) => bail!(format!("Failed to find binary {bin} in PATH: {e}.")),
+        Err(e) => bail!(format!("Failed to find binary `{bin}` in PATH `{e}`.")),
     }
+}
+
+fn run_bin(bin: &str, args: &[&str]) -> Result<()> {
+    let exists = check_if_in_path(bin).with_context(|| "Failed to search PATH".to_string())?;
+
+    if exists {
+        Command::new(bin)
+            .args(args)
+            .spawn()
+            .with_context(|| format!("{bin} failed to start."))?;
+
+        // TODO: check exit code / stderr output
+    } else {
+        bail!("Failed to find `{bin}` in PATH; skipping.")
+    }
+
+    Ok(())
 }
 
 fn parse_cfg_file(path: &str) -> Result<CV> {
@@ -90,36 +107,18 @@ fn main() -> Result<()> {
     std::fs::write(&args.output, output)
         .with_context(|| "Failed to dump output to file.".to_string())?;
 
-    if args.format {
-        let exists =
-            check_if_in_path(FMT_BIN).with_context(|| "Failed to search PATH".to_string())?;
+    // CHECK: better way to handle results?
 
-        if exists {
-            Command::new(FMT_BIN)
-                .args([&args.output, "--wrap-text", "--inplace"])
-                .spawn()
-                .expect("Formatter failed to start.");
-
-            // TODO: check output
-        } else {
-            println!("Failed to find `{FMT_BIN}` in PATH; skipping formatting.")
-        }
+    if args.format
+        && let Err(e) = run_bin(FMT_BIN, &[&args.output, "--wrap-text", "--inplace"])
+    {
+        eprintln!("Format failed: {e}")
     }
 
-    if args.compile {
-        let exists =
-            check_if_in_path(TYPST_BIN).with_context(|| "Failed to search PATH".to_string())?;
-
-        if exists {
-            Command::new(TYPST_BIN)
-                .args(["compile", &args.output])
-                .spawn()
-                .expect("Typst failed to start.");
-
-            // TODO: check output
-        } else {
-            println!("Failed to find `{TYPST_BIN}` in PATH; skipping compiling.")
-        }
+    if args.compile
+        && let Err(e) = run_bin(TYPST_BIN, &["compile", &args.output])
+    {
+        eprintln!("Typst compile failed: {e}")
     }
 
     Ok(())
